@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 
-class Config:
+class CNNConfig:
     """
     Configuration for CNN.
     """
@@ -45,7 +45,7 @@ class CNN(nn.Module):
            "static"
            "multichannel"
     """
-    def __init__(self, config=Config(), wv_matrix=None, n_classes=10, alt_model_type=None):
+    def __init__(self, config=CNNConfig(), wv_matrix=None, n_classes=10, alt_model_type=None):
         super(CNN, self).__init__()
         self.config = config
         self.wv_matrix = wv_matrix
