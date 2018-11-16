@@ -53,7 +53,6 @@ class CNN(nn.Module):
         self.alt_model_type = alt_model_type
         self._filter_sum = None
         self._sum_filters()
-        self.features = nn.Sequential()
 
         self.embedding = nn.Embedding(self.config.vocab_size + 2, self.config.word_dim, padding_idx=0)
 
@@ -65,6 +64,7 @@ class CNN(nn.Module):
             self.embedding2.weight.requires_grad = False
             self.IN_CHANNEL = 2
 
+        self.features = nn.Sequential()
         self.features.add_module(
             'conv1',
             conv_block(
