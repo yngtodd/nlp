@@ -39,14 +39,8 @@ class CNN(nn.Module):
     subsite_size : int
       Class size for subsite task.
 
-     laterality_size : int
-      Class size for laterality task.
-
-     behavior_size : int
-       Class size for behavior task.
-
-     grade_size : int
-       Class size for grade task.
+     n_classes : int
+       Number of classes to predict.
 
      alt_model_type : str, default=None
        Alternative type of model being used.
@@ -54,8 +48,7 @@ class CNN(nn.Module):
            "static"
            "multichannel"
     """
-    def __init__(self, config=Config(), wv_matrix=None,
-                 n_classes=10, alt_model_type=None):
+    def __init__(self, config=Config(), wv_matrix=None, n_classes=10, alt_model_type=None):
         super(CNN, self).__init__()
         self.config = config
         self.wv_matrix = wv_matrix
