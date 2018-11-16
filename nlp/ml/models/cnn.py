@@ -75,31 +75,34 @@ class CNN(nn.Module):
             self.embedding2.weight.requires_grad = False
             self.IN_CHANNEL = 2
 
-        self.features.add(
+        self.features.add_module(
+            'conv1',
             conv_block(
                 self.config.n_filters1,
                 self.config.kernel1,
                 self.config.dropout1
-            )
-        )
-
-         self.features.add(
-             conv_block(
-                 self.config.n_filters2,
-                 self.config.kernel2,
-                 self.config.dropout2
-            )
-         )
-
-         self.features.add(
-             conv_block(
-                 self.config.n_filters3,
-                 self.config.kernel3,
-                 self.config.dropout3
              )
          )
 
-         self.fc = nn.Linear(self._filter_sum, self.n_classes)
+        self.features.add_module(
+            'conv2',
+            conv_block(
+                self.config.n_filters2,
+                self.config.kernel2,
+                self.config.dropout2
+           )
+        )
+
+        self.features.add_module(
+            'conv3',
+            conv_block(
+                self.config.n_filters3,
+                self.config.kernel3,
+                self.config.dropout3
+            )
+        )
+
+        self.fc = nn.Linear(self._filter_sum, self.n_classes)
 
     def _sum_filters(self):
         """Get the total number of convolutional filters."""
