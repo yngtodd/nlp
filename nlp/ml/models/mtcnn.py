@@ -55,7 +55,7 @@ class MTCNN(nn.Module):
         self._filter_sum = None
         self._sum_filters()
 
-        self.embedding = nn.Embedding(self.vocab_size + 2, self.word_dim, padding_idx=0)
+        self.embedding = nn.Embedding(self.config.vocab_size + 2, self.config.word_dim, padding_idx=0)
 
         if self.alt_model_type == 'static':
             self.embedding.weight.requires_grad = False
