@@ -3,7 +3,9 @@ import torch.nn as nn
 
 
 class Config:
-
+    """
+    Configuration for MTCNN.
+    """
     def __init__(self):
         self.kernel1 = 3
         self.kernel2 = 4
