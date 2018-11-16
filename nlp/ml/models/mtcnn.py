@@ -24,7 +24,6 @@ class MTCNN(nn.Module):
 
     Parameters
     ----------
-
     subsite_size : int
       Class size for subsite task.
 
