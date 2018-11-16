@@ -99,9 +99,9 @@ class CNN(nn.Module):
         self._filter_sum = self.config.n_filters1 + self.config.n_filters2 + self.config.n_filters3
 
     def forward(self, x):
-        x = self.embedding(x).view(-1, 1, self.word_dim * self.max_sent_len)
+        x = self.embedding(x).view(-1, 1, self.config.word_dim * self.config.max_sent_len)
         if self.alt_model_type == "multichannel":
-            x2 = self.embedding2(x).view(-1, 1, self.word_dim * self.max_sent_len)
+            x2 = self.embedding2(x).view(-1, 1, self.config.word_dim * self.config.max_sent_len)
             x = torch.cat((x, x2), 1)
 
         conv_results = []
