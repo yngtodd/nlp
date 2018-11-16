@@ -36,9 +36,6 @@ class CNN(nn.Module):
 
     Parameters
     ----------
-    subsite_size : int
-      Class size for subsite task.
-
      n_classes : int
        Number of classes to predict.
 
@@ -108,9 +105,9 @@ class CNN(nn.Module):
             x = torch.cat((x, x2), 1)
 
         conv_results = []
-        conv_results.append(self.convblock1(x).view(-1, self.num_filters1))
-        conv_results.append(self.convblock2(x).view(-1, self.num_filters2))
-        conv_results.append(self.convblock3(x).view(-1, self.num_filters3))
+        conv_results.append(self.features.conv1(x).view(-1, self.config.n_filters1))
+        conv_results.append(self.features.conv2(x).view(-1, self.config.n_filters2))
+        conv_results.append(self.features.conv3(x).view(-1, self.config.n_filters3))
         x = torch.cat(conv_results, 1)
         out = self.fc(x)
         return out
