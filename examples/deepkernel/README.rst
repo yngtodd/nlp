@@ -2,7 +2,7 @@
 Deep Kernel Learning
 ====================
 
-Deep kernel learning `[1]`_ for document classifications using a convolutional 
+Deep kernel learning `[1]`_ for document classification using a convolutional 
 neural network for feature extraction `[2]`_.
 
 References
