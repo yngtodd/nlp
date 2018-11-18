@@ -30,7 +30,7 @@ def train(epoch, train_loader, optimizer, likelihood, model, device):
         loss = -mll(output, target)
         loss.backward()
         optimizer.step()
-        if (batch_idx + 1) % 25 == 0:
+        if (idx + 1) % 25 == 0:
             current_loss = loss.item()
             print(f'Epoch: {epoch} [{idx+1}/{len(train_loader)}], Loss: {current_loss:.6f}')
 
@@ -57,9 +57,11 @@ def main():
     parser.add_argument('--batchsize', type=int, default=10, help='Batch size.')
     parser.add_argument('--n_epochs', type=int, default=10, help='Number of epochs.')
     parser.add_argument('--lr', type=float, default=0.1, help='Path to data directory.')
+    parser.add_argument('--seed', type=int, default=42, help='Random seed.')
     parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
     args = parser.parse_args()
 
+    torch.manual_seed(args.seed)
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     device = torch.device("cuda:3" if use_cuda else "cpu")
 
