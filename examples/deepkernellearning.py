@@ -47,7 +47,7 @@ def test(test_loader, likelihood, model, device):
             pred = output.probs.argmax(1)
             correct += pred.eq(target.view_as(pred)).cpu().sum()
 
-    percent_corret = 100. * correct / float(len(test_loader.dataset))
+    percent_correct = 100. * correct / float(len(test_loader.dataset))
     print(f'Test set: Accuracy: {correct}/{len(test_loader.dataset)} ({percent_correct}%)')
 
 
