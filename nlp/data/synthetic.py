@@ -1,10 +1,11 @@
 import os
 import numpy as np
 
+from torch.utils.data import Dataset
 from nlp.data.utils import download_url, makedir_exist_ok
 
 
-class Synthetic:
+class Synthetic(Dataset):
     """Synthetic Dataset.
 
     Parameters
@@ -34,8 +35,10 @@ class Synthetic:
     test_data_file = 'test_data.npy'
     test_label_file = 'test_labels.npy'
 
-    def __init__(self, root, partition, download=False):
+    def __init__(self, root, partition, transform=None, target_transform=None, download=False):
         self.root = os.path.expanduser(root)
+        self.transform = transform
+        self.target_transform = target_transform
 
         if download:
             self.download()
@@ -62,6 +65,30 @@ class Synthetic:
 
     def load_data(self):
         return self.data, self.targets
+
+    def __getitem__(self, idx):
+        """
+        Parameters
+        ----------
+        index : int
+          Index of the data to be loaded.
+
+        Returns
+        -------
+        (document, target) : tuple
+           where target is index of the target class.
+        """
+        document, label = self.data[idx], int(self.targets[idx])
+
+
+        if self.transform is not None:
+            document = self.transform(document)
+
+
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        return document, target
 
     @property
     def raw_folder(self):
