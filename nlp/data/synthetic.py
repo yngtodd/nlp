@@ -78,7 +78,7 @@ class Synthetic(Dataset):
         (document, target) : tuple
            where target is index of the target class.
         """
-        document, label = self.data[idx], int(self.targets[idx])
+        document, target = self.data[idx], int(self.targets[idx])
 
 
         if self.transform is not None:
