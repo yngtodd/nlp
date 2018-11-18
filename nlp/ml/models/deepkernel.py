@@ -1,3 +1,5 @@
+import math
+
 import torch
 import torch.nn as nn
 import gpytorch
@@ -28,7 +30,7 @@ class GaussianProcessLayer(gpytorch.models.AdditiveGridInducingVariationalGP):
         self.covar_module = gpytorch.kernels.ScaleKernel(
             gpytorch.kernels.RBFKernel(
                 lengthscale_prior=gpytorch.priors.SmoothedBoxPrior(
-                    math.exp(-1), math.exp(1), sigma=0.1, log_transform=True
+                    math.exp(-1), math.exp(1), sigma=0.1,
                 )
             )
         )
