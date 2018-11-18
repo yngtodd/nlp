@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-#import gpytorch
+import gpytorch
 
 from nlp.ml.models import CNN
 from nlp.ml.models import CNNConfig
