@@ -16,7 +16,7 @@ from nlp.ml.models import ConvFeatureExtractor
 from nlp.ml.models import DKLModel
 
 
-def train(epoch, train_loader, optimizer, likelihood, model):
+def train(epoch, train_loader, optimizer, likelihood, model, device):
     model.train()
     likelihood.train()
 
@@ -24,7 +24,7 @@ def train(epoch, train_loader, optimizer, likelihood, model):
 
     train_loss = 0.
     for idx, (data, target) in enumerate(train_loader):
-        data, target = data.cuda(), target.cuda()
+        data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
         loss = -mll(output, target)
@@ -35,13 +35,13 @@ def train(epoch, train_loader, optimizer, likelihood, model):
             print(f'Epoch: {epoch} [{idx+1}/{len(train_loader)}], Loss: {current_loss:.6f}')
 
 
-def test(test_loader, likelihood, model)
+def test(test_loader, likelihood, model, device):
     model.eval()
     likelihood.eval()
 
     correct = 0
     for data, target in test_loader:
-        data, target = data.cuda(), target.cuda()
+        data, target = data.to(device), target.to(device)
         with torch.no_grad():
             output = likelihood(model(data))
             pred = output.probs.argmax(1)
@@ -57,20 +57,24 @@ def main():
     parser.add_argument('--batchsize', type=int, default=10, help='Batch size.')
     parser.add_argument('--n_epochs', type=int, default=10, help='Number of epochs.')
     parser.add_argument('--lr', type=float, default=0.1, help='Path to data directory.')
+    parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
     args = parser.parse_args()
+
+    use_cuda = not args.no_cuda and torch.cuda.is_available()
+    device = torch.device("cuda:3" if use_cuda else "cpu")
 
     traindata = Synthetic(args.datapath, 'train', download=True)
     train_loader = DataLoader(traindata, batch_size=args.batchsize)
     num_classes = len(np.unique(traindata.targets))
 
     testdata = Synthetic(args.datapath, 'test')
-    test_loader = Dataloader(testdata, batch_size=args.batchsize)
+    test_loader = DataLoader(testdata, batch_size=args.batchsize)
 
-    feature_extractor = ConvFeatureExtractor().cuda()
+    feature_extractor = ConvFeatureExtractor().to(device)
     num_features = feature_extractor._filter_sum
 
-    model = DKLModel(feature_extractor, num_dim=num_features).cuda()
-    likelihood = SoftmaxLikelihood(num_features=model.num_dim, n_classes=num_classes).cuda()
+    model = DKLModel(feature_extractor, num_dim=num_features).to(device)
+    likelihood = SoftmaxLikelihood(num_features=model.num_dim, n_classes=num_classes).to(device)
 
     optimizer = SGD([
         {'params': model.feature_extractor.parameters()},
@@ -88,8 +92,8 @@ def main():
     for epoch in range(1, args.n_epochs+1):
         scheduler.step()
         with settings.use_toeplitz(False), settings.max_preconditioner_size(0):
-            train(epoch, train_loader, optimizer, likelihood, model)
-            test(test_loader, likelihood, model)
+            train(epoch, train_loader, optimizer, likelihood, model, device)
+            test(test_loader, likelihood, model, device)
 
         state_dict = model.state_dict()
         likelihood_state_dict = likelihood.state_dict()
