@@ -6,13 +6,10 @@ from nlp.ml.models import CNN
 from nlp.ml.models import CNNConfig
 
 
-class ConvFeatureExtractor(nn.Module):
+class ConvFeatureExtractor(CNN):
     """Convolutional feature extractor."""
-    def __init__(self, config=CNNConfig(), cnn=CNN()):
+    def __init__(self):
         super(ConvFeatureExtractor, self).__init__()
-        self.config = config
-        self.embedding = cnn.embedding
-        self.features = cnn.features
 
     def forward(self, x):
          x = self.embedding(x).view(-1, 1, self.config.word_dim * self.config.max_sent_len)
