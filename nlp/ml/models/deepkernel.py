@@ -1,14 +1,14 @@
 import torch
 import torch.nn as nn
-import gpytorch
+#import gpytorch
 
-from nlp.ml import CNN
-from nlp.ml import CNNConfig
+from nlp.ml.models import CNN
+from nlp.ml.models import CNNConfig
 
 
 class ConvFeatureExtractor(nn.Module):
     """Convolutional feature extractor."""
-    def __init__(self, config=Config(), cnn=CNN()):
+    def __init__(self, config=CNNConfig(), cnn=CNN()):
         super(ConvFeatureExtractor, self).__init__()
         self.config = config
         self.embedding = cnn.embedding
