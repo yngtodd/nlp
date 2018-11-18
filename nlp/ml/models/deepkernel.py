@@ -5,7 +5,6 @@ import torch.nn as nn
 import gpytorch
 
 from nlp.ml.models import CNN
-from nlp.ml.models import CNNConfig
 
 
 class ConvFeatureExtractor(CNN):
