@@ -1,5 +1,5 @@
-from .cnn import CNNConfig
-from .cnn import CNN
+from .convolutional.cnn import CNNConfig
+from .convolutional.cnn import CNN
 
-from .deepkernel import ConvFeatureExtractor
-from .deepkernel import DKLModel
+from .kernel_learning.deepkernel import ConvFeatureExtractor
+from .kernel_learning.deepkernel import DKLModel
