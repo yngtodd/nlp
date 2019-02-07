@@ -19,6 +19,7 @@ class ConvFeatureExtractor(CNN):
          conv_results.append(self.features.conv2(x).view(-1, self.config.n_filters2))
          conv_results.append(self.features.conv3(x).view(-1, self.config.n_filters3))
          x = torch.cat(conv_results, 1)
+         x = self.pool(x)
          return x
 
 
@@ -28,7 +29,7 @@ class GaussianProcessLayer(gpytorch.models.AdditiveGridInducingVariationalGP):
                                                    num_dim=num_dim, mixing_params=False, sum_output=False)
         self.covar_module = gpytorch.kernels.ScaleKernel(
             gpytorch.kernels.RBFKernel(
-                lengthscale_prior=gpytorch.priors.SmoothedBoxPrior(
+                log_lengthscale_prior=gpytorch.priors.SmoothedBoxPrior(
                     math.exp(-1), math.exp(1), sigma=0.1,
                 )
             )

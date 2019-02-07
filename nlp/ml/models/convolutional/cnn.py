@@ -92,6 +92,8 @@ class CNN(nn.Module):
             )
         )
 
+        self.pool = nn.AdaptiveMaxPool1d(5)
+        self.features.add_module('adaptivepool', self.pool)
         self.fc = nn.Linear(self._filter_sum, self.n_classes)
 
     def _sum_filters(self):
@@ -110,4 +112,5 @@ class CNN(nn.Module):
         conv_results.append(self.features.conv3(x).view(-1, self.config.n_filters3))
         x = torch.cat(conv_results, 1)
         out = self.fc(x)
+        out = self.pool(x)
         return out

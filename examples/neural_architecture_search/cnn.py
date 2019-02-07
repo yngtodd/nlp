@@ -1,6 +1,7 @@
 import argparse
 import numpy as np
 
+import torch
 from torch.utils.data import DataLoader
 from torch.nn.functional import cross_entropy
 
@@ -21,26 +22,31 @@ def main():
     train = Synthetic(args.datapath, 'train', target=0, download=True)
     test = Synthetic(args.datapath, 'test', target=0, download=True)
 
+    train.data = train.data.astype(float)
+    test.data = test.data.astype(float)
+
     x, y = train.load_data()
-    input_shape = x.shape
+    input_shape = np.expand_dims(x, axis=0).shape
     num_classes = np.max(y) + 1
+
 
     trainloader = DataLoader(train, batch_size=16)
     testloader = DataLoader(test, batch_size=16)
 
     cnnModule = CnnModule(
-        loss=cross_entropy, 
+        loss=cross_entropy,
         metric=Accuracy,
-        searcher_args={}, 
+        searcher_args={},
         verbose=True,
         search_type=GreedySearcher
     )
 
     cnnModule.fit(
-        n_output_node=num_classes, 
+        n_output_node=num_classes,
         input_shape=input_shape,
         train_data=trainloader,
-        test_data=testloader)
+        test_data=testloader
+    )
 
 
 if __name__=='__main__':
