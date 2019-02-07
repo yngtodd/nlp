@@ -35,8 +35,9 @@ class Synthetic(Dataset):
     test_data_file = 'test_data.npy'
     test_label_file = 'test_labels.npy'
 
-    def __init__(self, root, partition, transform=None, target_transform=None, download=False):
+    def __init__(self, root, partition, target=None, transform=None, target_transform=None, download=False):
         self.root = os.path.expanduser(root)
+        self.target = target
         self.transform = transform
         self.target_transform = target_transform
 
@@ -49,19 +50,37 @@ class Synthetic(Dataset):
 
         self.partition = partition
         if self.partition == 'train':
-            data_file = self.training_data_file
-            label_file = self.training_label_file
+            self.data_file = self.training_data_file
+            self.label_file = self.training_label_file
         elif self.partition == 'test':
-            data_file = self.test_data_file
-            label_file = self.test_label_file
+            self.data_file = self.test_data_file
+            self.label_file = self.test_label_file
         else:
             raise ValueError("Partition must either be 'train' or 'test'.")
 
-        self.data = np.load(os.path.join(self.processed_folder, data_file))
-        self.targets = np.load(os.path.join(self.processed_folder, label_file))
+        self.data = np.load(os.path.join(self.processed_folder, self.data_file))
+        self.targets = self.load_targets(self.target) 
 
     def __len__(self):
         return len(self.data)
+
+    def load_targets(self, target=None):
+        """
+        Load targets.
+
+        Parameters
+        ----------
+        target : int
+            specify a single task rather than multitask.
+            Must be [0,3].
+        """
+        targets = np.load(os.path.join(self.processed_folder, self.label_file))
+
+        if target is not None:
+            print(f'Loading target {target}')
+            targets = targets[:, target]
+
+        return targets
 
     def load_data(self):
         return self.data, self.targets
