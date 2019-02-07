@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 from nlp.data.utils import download_url, makedir_exist_ok
 
 
-class Anon(Dataset):
+class Synthetic(Dataset):
     """Anonymous Synthetic Dataset.
 
     Parameters
@@ -24,10 +24,10 @@ class Anon(Dataset):
         downloaded again.
     """
     urls = [
-      'https://raw.githubusercontent.com/yngtodd/unlp/master/anon/train-data.npy',
-      'https://raw.githubusercontent.com/yngtodd/unlp/master/anon/train-labels.npy',
-      'https://raw.githubusercontent.com/yngtodd/unlp/master/anon/test-data.npy',
-      'https://raw.githubusercontent.com/yngtodd/unlp/master/anon/test-labels.npy'
+      'https://raw.githubusercontent.com/yngtodd/unlp/master/synthetic/train_data.npy',
+      'https://raw.githubusercontent.com/yngtodd/unlp/master/synthetic/train_labels.npy',
+      'https://raw.githubusercontent.com/yngtodd/unlp/master/synthetic/test_data.npy',
+      'https://raw.githubusercontent.com/yngtodd/unlp/master/synthetic/test_labels.npy'
     ]
 
     training_data_file= 'train_data.npy'
@@ -131,12 +131,12 @@ class Anon(Dataset):
         print('Processing...')
 
         training_set = (
-            np.load(os.path.join(self.raw_folder, 'train-data.npy')),
-            np.load(os.path.join(self.raw_folder, 'train-labels.npy'))
+            np.load(os.path.join(self.raw_folder, 'train_data.npy')),
+            np.load(os.path.join(self.raw_folder, 'train_labels.npy'))
         )
         test_set = (
-            np.load(os.path.join(self.raw_folder, 'test-data.npy')),
-            np.load(os.path.join(self.raw_folder, 'test-labels.npy'))
+            np.load(os.path.join(self.raw_folder, 'test_data.npy')),
+            np.load(os.path.join(self.raw_folder, 'test_labels.npy'))
         )
 
         # Save processed training data
