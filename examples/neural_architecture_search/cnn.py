@@ -22,13 +22,20 @@ def main():
     train = Synthetic(args.datapath, 'train', target=0, download=True)
     test = Synthetic(args.datapath, 'test', target=0, download=True)
 
-    train.data = train.data.astype(float)
-    test.data = test.data.astype(float)
+    train.data = torch.tensor(train.data, dtype=torch.float)
+    test.data = torch.tensor(test.data, dtype=torch.float)
 
     x, y = train.load_data()
-    input_shape = np.expand_dims(x, axis=0).shape
-    #input_shape = np.expand_dims(input_shape, axis=3).shape
+    #input_shape = np.expand_dims(x, axis=2).shape
+    #input_shape = np.expand_dims(input_shape, axis=0).shape
     #input_shape = x.shape
+
+    train.data = torch.unsqueeze(train.data, dim=0)
+    train.data = torch.unsqueeze(train.data, dim=3) 
+    test.data = torch.unsqueeze(test.data, dim=0)
+    test.data = torch.unsqueeze(test.data, dim=3)
+
+    input_shape = train.data.shape
     print(f'input_shape = {input_shape}')
     print(f'n_dim = {len(input_shape)-1}')
     num_classes = np.max(y) + 1
