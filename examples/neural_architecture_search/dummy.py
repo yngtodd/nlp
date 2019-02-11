@@ -26,11 +26,9 @@ def main():
     test.data = test.data.astype(float)
 
     x, y = train.load_data()
-    input_shape = np.expand_dims(x, axis=0).shape
-    #input_shape = np.expand_dims(input_shape, axis=3).shape
+    #input_shape = np.expand_dims(x, axis=0)
+    input_shape = np.expand_dims(input_shape, axis=3).shape
     #input_shape = x.shape
-    print(f'input_shape = {input_shape}')
-    print(f'n_dim = {len(input_shape)-1}')
     num_classes = np.max(y) + 1
 
     trainloader = DataLoader(train, batch_size=16)
